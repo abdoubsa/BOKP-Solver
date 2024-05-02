@@ -44,7 +44,7 @@ def knapsack_solver(poids_maximum, poids_object, z1_vect, z2_vect, epsilon):
     for i in range(len(solutions_pareto)):
         indexes.append(f'X({i+1})')
     df = pd.DataFrame({'': indexes,'Solution:': solutions_pareto, 'Z1': valeurs_solution_Z1, 'Z2': valeurs_solution_Z2})
-    table = st.expander("Expand Solutions")
+    table = st.expander("Solutions")
     with table:
         st.table(df.set_index(df.columns[0]))
 
@@ -53,11 +53,11 @@ def knapsack_solver(poids_maximum, poids_object, z1_vect, z2_vect, epsilon):
     plt.plot(valeurs_solution_Z1, valeurs_solution_Z2, marker='o', linestyle='-')
     plt.xlabel('Z1')
     plt.ylabel('Z2')
-    plt.title('Pareto Front')
+    plt.title('Front de pareto')
     st.set_option('deprecation.showPyplotGlobalUse', False)
     st.pyplot()
 
-    st.write(f'### calculation time: {round((end - start), 4)} seconds')
+    st.write(f'### Temps de calcul: {round((end - start), 4)} seconds')
 
 
 def main():
@@ -69,8 +69,11 @@ def main():
     )
 
     if selected == "Manual":
+        text = "Developer par: Boussaa Abderrahmane et Badis Abdelkader Amine"
+        bold_text = f"<p style='font-weight: bold;'>{text}</p>"
 
-        st.title('Bi-objective Knapsack Problem Solver')
+        st.write(bold_text, unsafe_allow_html=True)
+        st.title('Bi-objective Knapsack Problem Solver with the epsilon constraint method')
         poids_maximum = st.number_input('Poids maximum du sac:')
         n = st.number_input("Nombre d'objets:", step=1)
         epsilon = st.number_input("Valeur d'epsilon:")
@@ -82,26 +85,28 @@ def main():
         solve = st.button('Résoudre')
         st.write()
         st.write("### L'ensemble des objets:")
-        with st.expander('Objects:'):
+        with st.expander('Objets:'):
             for i in range(int(n)):
                 col1, col2, col3, col4 = st.columns(4)
                 with col1:
                     st.write(f'## Objet {i + 1}')
                 with col2:
-                    poids = st.number_input(f"Poids de l'objet:", key=f"poids_{i+1}")
+                    poid = st.number_input(f"Poids de l'objet:", key=f"poids_{i+1}")
                 with col3:
-                    valeur1 = st.number_input(f"Valeur de Z1 de l'objet:", key=f"z1_{i+1}")
+                    valeur1 = st.number_input(f"Valeur 1 de l'objet:", key=f"z1_{i+1}")
                 with col4:
-                    valeur2 = st.number_input(f"Valeur de Z2 de l'objet:", key=f"z2_{i+1}")
+                    valeur2 = st.number_input(f"Valeur 2 de l'objet:", key=f"z2_{i+1}")
 
-                poids_object = np.append(poids_object, poids)
+                poids_object = np.append(poids_object, poid)
                 z1_vect = np.append(z1_vect, valeur1)
                 z2_vect = np.append(z2_vect, valeur2)
         if solve:
             knapsack_solver(poids_maximum, poids_object, z1_vect, z2_vect, epsilon)
     if selected == "Random" :
-
-        st.title('Bi-objective Knapsack Problem Solver')
+        text = "Developer par: Boussaa Abderrahmane et Badis Abdelkader Amine"
+        bold_text = f"<p style='font-weight: bold;'>{text}</p>"
+        st.write(bold_text, unsafe_allow_html=True)
+        st.title('Bi-objective Knapsack Problem Solver with the epsilon constraint method')
         poids_maximum = st.number_input('Poids maximum du sac:')
         n = st.number_input("Nombre d'objets:", step=1)
         epsilon = st.number_input("Valeur d'epsilon:")
@@ -114,19 +119,19 @@ def main():
         if random:
             randomized = True
             st.write("### L'ensemble des objets:")
-            with st.expander('Objects:'):
+            with st.expander('Objets:'):
                 for i in range(int(n)):
                     col1, col2, col3, col4 = st.columns(4)
                     with col1:
                         st.write(f'### Objet {i + 1}')
                     with col2:
-                        poids = st.number_input(f"Poids de l'objet:", key=f"Rpoids_{i+1}", value= np.random.randint(0,poids_maximum) + np.random.random())
+                        poid = st.number_input(f"Poids de l'objet:", key=f"Rpoids_{i+1}", value= np.random.randint(0,poids_maximum) + np.random.random())
                     with col3:
-                        valeur1 = st.number_input(f"Valeur de Z1 de l'objet:", key=f"Rz1_{i+1}",value= abs(np.random.randint(0, 100) + np.random.random()))
+                        valeur1 = st.number_input(f"Valeur 1 de l'objet:", key=f"Rz1_{i+1}",value= abs(np.random.randint(0, 100) + np.random.random()))
                     with col4:
-                        valeur2 = st.number_input(f"Valeur de Z2 de l'objet:", key=f"Rz2_{i+1}",value= abs(np.random.randint(0, 100) + np.random.random()))
+                        valeur2 = st.number_input(f"Valeur 2 de l'objet:", key=f"Rz2_{i+1}",value= abs(np.random.randint(0, 100) + np.random.random()))
 
-                    poids_object = np.append(poids_object, poids)
+                    poids_object = np.append(poids_object, poid)
                     z1_vect = np.append(z1_vect, valeur1)
                     z2_vect = np.append(z2_vect, valeur2)
             knapsack_solver(poids_maximum, poids_object, z1_vect, z2_vect, epsilon)
